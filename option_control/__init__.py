@@ -4,6 +4,10 @@
 # - python3 -m option_control --help
 
 from .options import parseOpts
+from .provider import Provider
+
+# Import providers.
+from .providers.a365binaryoption import a365binaryoptionProvider
 
 def _main():
 
@@ -27,6 +31,18 @@ def _main():
             if opts.verbose:
                 print('[debug] Adding header: %s:%s\n' % (key, value))
             headers[key] = value
+
+    # Assign provider's class handler.
+    #provider = Provider(opts.provider)
+    provider = {
+        '356binaryoption': a365binaryoptionProvider()
+    }.get(opts.provider, None)
+    if provider is None:
+        parser.error("ERROR: Unknown provider (%s)!" % opts.provider)
+    provider.set_options(opts)
+
+    # Authenticate.
+    provider.authenticate()
 
 def main():
     try:

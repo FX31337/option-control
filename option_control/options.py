@@ -28,9 +28,14 @@ def parseOpts():
         if not os.path.exists(args.config_path):
             parser.error('Config does not exist at %s.' % args.config_path)
 
+    # Check mandatory options.
+    if not opts.provider:
+        parser.error('ERROR: Please specify provider (-p)!')
+
     if opts.verbose:
         for label, conf in (
             ('Command-line args', sys.argv[1:]),
         ):
             print('[debug] %s: %s' % (label, conf))
+
     return parser, opts, args
